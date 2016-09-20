@@ -1,0 +1,263 @@
+@(restaurantName: java.lang.String, totalReviews :java.lang.Integer, reviews :java.util.ArrayList[model.Model.ReviewOutput], summaryRatings : java.util.LinkedHashMap[java.lang.String, java.lang.Double])
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Starley</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/logo-icon.png")">
+
+            <!-- Bootstrap Core CSS -->
+        <link href="@routes.Assets.at("css/bootstrap.min.css")" rel="stylesheet">
+
+            <!-- Custom CSS -->
+        <link href="@routes.Assets.at("css/landing-page.css")" rel="stylesheet">
+
+            <!-- Custom Fonts -->
+        <link href="@routes.Assets.at("font-awesome/css/font-awesome.min.css")" rel="stylesheet" type="text/css">
+
+        <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+
+            <!-- Rate it -->
+        <link rel="stylesheet" href="@routes.Assets.at("rateit/rateit.css")"/>
+
+    </head>
+    <body>
+
+        <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+            <div class="container topnav">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand topnav" href="#">Starley</a>
+                </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="@routes.Application.home">Home</a>
+                        </li>
+                        <li>
+                            <a href="@routes.Application.home#Contact">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                    <!-- /.navbar-collapse -->
+            </div>
+                <!-- /.container -->
+        </nav>
+        <!-- Header -->
+
+        <a name="Summary"></a>
+        <div class="content-section-a">
+
+            <div class="container">
+                <div class="row row-centered">
+                    <h2 class="section-heading restaurant-name">@restaurantName</h2>
+                    <h5 class="section-heading total-review">@totalReviews Reviews</h5>
+                </div>
+                <div class="row row-centered">
+                    @for((cat, rating) <- summaryRatings) {
+                        <div class="col-lg-2 col-xs-3 col-centered">
+                            <hr class="section-heading-spacer">
+                            <div class="clearfix"></div>
+                            <h3 class="section-heading category-title">@cat</h3>
+                            <img class="img-responsive" src="@routes.Assets.at("img/"+cat+".png")" alt="">
+                            <h3 class="section-heading category-rating">@("%.1f".format(rating))</h3>
+                            <div class="rateit" data-rateit-value="@rating" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                        </div>
+                    }
+                </div>
+                <div class="row-centered">
+                    <div class="button">
+                        <br>
+                        <br>
+                        <button id="show">Show Process</button>
+                    </div>
+                </div>
+
+            </div>
+
+                <!-- /.container -->
+        </div>
+
+
+        <div class="content-section-b" id="process" style="display:none">
+            <div class="container">
+                <div class="row">
+                    <div name="process">
+                        @for((review, index) <- reviews.zipWithIndex){
+                            <div class="col-lg-4 col-sm-4">
+                                <hr class="section-heading-spacer">
+                                <div class="clearfix"></div>
+                                <h3>Review @(index+1) </h3>
+
+                                <h4 class="process-step">Step 1: Subjectivity</h4>
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="success">No</th>
+                                            <th class="success">Kalimat</th>
+                                            <th class="success">Kelas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for((instance,i) <- review.getOutputNBC.zipWithIndex){
+                                            <tr>
+                                                <td>@(i+1)</td>
+                                                <td>@instance.stringValue(0)</td>
+                                                <td>@instance.stringValue(1)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                                <h4 class="process-step">Step 2: Token Classification</h4>
+                                <table class="table table-condensed table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="info">Kata</th>
+                                            <th class="info">POS Tag</th>
+                                            <th class="info">Kelas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @for(sequenceTaggings <- review.getOutputCRF){
+                                        @for( (sequenceInput, i) <- sequenceTaggings.getSequenceInput.zipWithIndex){
+                                            <tr>
+                                                <td>@sequenceInput.getWord</td>
+                                                <td>@sequenceInput.getPostag</td>
+                                                <td>@sequenceTaggings.getOutput().get(i)</td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+
+                                <h4 class="process-step">Step 3: Aspect & Sentiment Extraction</h4>
+                                <table class="table table-condensed table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="info">No</th>
+                                            <th class="info">Orientation</th>
+                                            <th class="info">Aspect</th>
+                                            <th class="info">Sentiment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @for((as, i) <- review.getAspectSentiments.zipWithIndex) {
+                                        <tr>
+                                            <td>@(i+1)</td>
+                                            @if(as.getOrientation == 1) {
+                                                <td>+</td>
+                                            } else {
+                                                <td>-</td>
+                                            }
+                                            <td>@as.getAspect</td>
+                                            <td>@as.getSentiment</td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+
+                                <h4 class="process-step">Step 4: Aspect Aggregation & Rating</h4>
+                                <table class="table table-condensed table-bordered table-hover">
+                                    <tbody>
+                                    @for((cat, aggregations) <- review.getAggregation) {
+                                        <tr>
+                                            <td class="info"> @cat </td>
+                                            <td class="info process-step"> @("%.2f".format(review.getRating.get(cat)))</td>
+                                            <td class="info"> </td>
+                                        </tr>
+                                        @for(ag <- aggregations) {
+                                            <tr>
+                                            @if(ag.getOrientation == 1) {
+                                                <td>+</td>
+                                            } else {
+                                                <td>-</td>
+                                            }
+                                                <td>@ag.getAspect</td>
+                                                <td>@ag.getSentiment</td>
+                                            </tr>
+                                        }
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+            <a href="#" class="back-to-top">Back to Top</a>
+        </div>
+
+
+            <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ul class="list-inline">
+                            <li>
+                                <a href="@routes.Application.home#about">About</a>
+                            </li>
+                            <li class="footer-menu-divider">&sdot;</li>
+                            <li>
+                                <a href="@routes.Application.home#service">Rate</a>
+                            </li>
+                            <li class="footer-menu-divider">&sdot;</li>
+                            <li>
+                                <a href="@routes.Application.home#contact">Contact</a>
+                            </li>
+                        </ul>
+                        <p class="copyright text-muted small">Copyright &copy; Starley 2016. All Rights Reserved</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+
+
+            <!-- Rate it -->
+        <script type="text/javascript" src="@routes.Assets.at("rateit/jquery.rateit.min.js")"></script>
+
+        <script>
+        $(document).ready(function(){
+            $("#show").click(function(){
+                $("#process").toggle();
+            });
+        });
+
+        var amountScrolled = 300;
+        $(window).scroll(function() {
+            if ( $(window).scrollTop() > amountScrolled ) {
+                $('a.back-to-top').fadeIn('slow');
+            } else {
+                $('a.back-to-top').fadeOut('slow');
+            }
+        });
+
+        $('a.back-to-top').click(function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 700);
+            return false;
+        });
+        </script>
+
+
+    </body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Starley</title>
+
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/logo-icon.png")">
+
+        <!-- Bootstrap Core CSS -->
+    <link href="@routes.Assets.at("css/bootstrap.min.css")" rel="stylesheet">
+
+        <!-- Custom CSS -->
+    <link href="@routes.Assets.at("css/landing-page.css")" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+    <link href="@routes.Assets.at("font-awesome/css/font-awesome.min.css")" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+        <!-- Rate it -->
+    <link rel="stylesheet" href="@routes.Assets.at("rateit/rateit.css")"/>
+
+</head>
+<body>
+
+    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+        <div class="container topnav">
+                <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand topnav" href="#">Starley</a>
+            </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+                    <li>
+                        <a href="#about">About</a>
+                    </li>
+                    <li>
+                        <a href="#services">Rate</a>
+                    </li>
+                    <li>
+                        <a href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+                <!-- /.navbar-collapse -->
+        </div>
+            <!-- /.container -->
+    </nav>
+
+        <!-- Header -->
+    <div class="intro-header">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1>Starley</h1>
+                        <h3>Rate your restaurant... automatically</h3>
+                        <hr class="intro-divider">
+                        <ul class="list-inline intro-social-buttons">
+
+                            <li>
+                                <a href="https://github.com/susantigojali" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                            </li>
+                            <li>
+                                <a href="https://linkedin.com/in/susantigojali" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+            <!-- /.container -->
+    </div>
+
+    <a name="about"></a>
+    <div class="content-section-a">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">About Starley</h2>
+                    <p class="lead">Starley will rate the restaurant based on the review.
+                        Rating will be calculated within four categories: food, service, price, and place.
+                        This application is specific to Indonesian reviews.
+                    </p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+
+                    <img class="img-responsive" src="@routes.Assets.at("img/process2.png")" alt="">
+                </div>
+            </div>
+
+        </div>
+            <!-- /.container -->
+    </div>
+
+    <a  name="services"></a>
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Let's Get Rated..</h2>
+                    <p class="lead">Upload your review file and get the star!</p>
+                    @helper.form(action = routes.Application.upload, 'enctype -> "multipart/form-data") {
+                        <input  class="browse-button" type="file" name="file">
+                        <br>
+                        <input class="submit-button" type="submit" name="submit" value="Submit"/>
+
+                    }
+                </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img class="img-responsive" src="@routes.Assets.at("img/building2.png")" alt="">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-inline">
+                        <li>
+                            <a href="#about">About</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#service">Rate</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#contact">Contact</a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted small">Copyright &copy; Starley 2016. All Rights Reserved</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="@routes.Assets.at("js/jquery.js")"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+    <script src="@routes.Assets.at("js/bootstrap.min.js")"></script>
+
+        <!-- Rate it -->
+    <script type="text/javascript" src="@routes.Assets.at("rateit/jquery.rateit.min.js")"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+MyResto
+title;text
+Makanannya enak dan murah;andrey aneh, rasa cuminya tidak enak
